@@ -1,0 +1,50 @@
+name: ZCLI update
+
+# Triggers the workflow...
+on:
+  # ...when you push...
+  push:
+    # ...to branch "main" 
+    branches: [master]
+  # ...when you manually click "Run Workflow" on GitHub from the Actions page  
+  workflow_dispatch:
+
+# If the worflow is triggered by one of the above options...
+
+# ...jobs will kick off to...
+jobs:
+  # ...create a build using...
+  build:
+    # ...the latest version of Ubuntu...
+    runs-on: ubuntu-latest
+    # ...using Node version 18.x...
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    #...and these authentication details, which are pulled from your Actions secrets    
+    env:
+      ZENDESK_SUBDOMAIN: d3v-gsneotek
+      ZENDESK_EMAIL: sorasora@gsnict.com
+      ZENDESK_API_TOKEN: ixyn3ikQR14XoVBTcRmJzoMMEJYtpZb4fveDhPEW
+
+# With the environment setup, we can begin these steps...
+    steps:
+      # Until the next comment, these are default actions for the Node.js template from GitHub
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          # Uncomment the next line only when using React
+          # cache: 'npm'
+          # ...install the Zendesk CLI
+      - name: Install zcli
+        run: npm i @zendesk/zcli -g
+      # ...install the Zendesk CLI
+      - name: Install app dependencies
+        run: npm install
+      - name: Create dist directory
+        run: npm run build
+      - name: Deploy the app
+        run: zcli apps:update dist
