@@ -31,9 +31,9 @@ jobs:
 # With the environment setup, we can begin these steps...
     steps:
       # Until the next comment, these are default actions for the Node.js template from GitHub
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           # Uncomment the next line only when using React
